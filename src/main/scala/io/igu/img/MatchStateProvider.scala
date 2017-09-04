@@ -4,15 +4,15 @@ import io.igu.img.model.MatchEvent
 
 import scala.io.Source
 
-object MatchStateProvider {
-  def fromResource[U](file: String): ((MatchState) => U) => Unit = fromSource(Source.fromResource(file))
+trait MatchStateProvider {
 
+  def fromResource[U](file: String): ((MatchState) => U) => Unit = fromSource(Source.fromResource(file))
 
   def fromSource[U](source: Source)(func: MatchState => U): Unit = {
     try {
       source
         .getLines()
-        .filter(!_.isEmpty)
+        .filter(_.isNotBlank)
         .map(MatchEvent.fromHex)
         .foldLeft(MatchState.empty) { (state, event) =>
           val newState = state :+ event
@@ -23,4 +23,11 @@ object MatchStateProvider {
       source.close()
     }
   }
+
+  private implicit class StringPimps(str: String) {
+    def isBlank: Boolean = str.trim.length == 0
+
+    def isNotBlank: Boolean = !isBlank
+  }
+
 }

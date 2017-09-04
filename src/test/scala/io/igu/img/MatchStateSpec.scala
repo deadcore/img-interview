@@ -38,6 +38,20 @@ class MatchStateSpec extends WordSpec with Matchers {
         unorderState.slice(0, 1) should be(MatchState(Seq(earlyGame)))
       }
     }
+
+    ":+" should {
+      "append a [MatchEvent] to the match state" in {
+        val expected = MatchState(Seq(earlyGame))
+
+        MatchState.empty :+ earlyGame should be(expected)
+      }
+
+      "drop any duplicate events" in {
+        val expected = MatchState(Seq(earlyGame))
+
+        MatchState.empty :+ earlyGame :+ earlyGame should be(expected)
+      }
+    }
   }
 
 }

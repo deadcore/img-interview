@@ -32,7 +32,6 @@ object MatchEvent {
       team2Score = Integer.parseInt(team2Score, 2),
       matchTime = Integer.parseInt(matchTime, 2)
     )
-
   }
 
   private def toBinary(i: Int, digits: Int) = {
